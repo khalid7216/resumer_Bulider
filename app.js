@@ -1,51 +1,67 @@
-//RESUME DATA STRUCTURE
-const resumerData = {
-    personal: {
-        name :   '',
-        email :  '',
-        phone :  '',
-        location: '',
-        linkedin: '',
-        portfolio: '',
 
+const resumeData = {
+  personal: {
+    name: '',
+    email: '',
+    phone: '',
+    location: '',
+    linkedin: '',
+    portfolio: ''
+  },
+  summary: '',
+  experience: [],
+  education: [],
+  skills: [],
+  certifications: [],
+  languages: []
+};
 
-    },
-    summary: '',
-    experience:'',
-    education: '',
-    Skills:'' ,
-    certifications:'',
+// 2. PERSONAL INFO FUNCTIONS
+function setPersonalInfo(field, value) {
+  if (resumeData.personal.hasOwnProperty(field)) {
+    resumeData.personal[field] = value;
+    return true;
+  }
+  return false;
+}
 
+function getPersonalInfo() {
+  return resumeData.personal;
 }
-//DATA MANAGEMENT FUNCTIONS
-function Add(Jobtitle, company, startDate , EndDate , Bullets){
-    resumerData.experience.push({
-        id: Date.now(),
-        jobTitle,
-        company,
-        location,
-        startDate,
-        EndDate,
-        Jobtitle,
-        Bullets: Bullets||[]
-        
-    })
-      return resumerData.experience[resumerData.experience.length - 1];
 
+// 3. EXPERIENCE FUNCTIONS
+function addExperience(jobTitle, company, location, startDate, endDate, bullets) {
+  const newExp = {
+    id: Date.now(),
+    jobTitle: jobTitle || '',
+    company: company || '',
+    location: location || '',
+    startDate: startDate || '',
+    endDate: endDate || '',
+    bullets: bullets || []
+  };
+  
+  resumeData.experience.push(newExp);
+  return newExp;
 }
-function updatExperience( id, field, value ){
-const exp  = resumerData.experience.find(e=> e.id ===id)
-if (exp){
-    exp[field] =value;
-    return true
+
+function updateExperience(id, field, value) {
+  const exp = resumeData.experience.find(e => e.id === id);
+  if (exp && exp.hasOwnProperty(field)) {
+    exp[field] = value;
+    return true;
+  }
+  return false;
 }
-return false
+
+function deleteExperience(id) {
+  const index = resumeData.experience.findIndex(e => e.id === id);
+  if (index > -1) {
+    resumeData.experience.splice(index, 1);
+    return true;
+  }
+  return false;
 }
-function DeleteExperience(id) {
-    const index = resumerData.experience.findIndex(e => e.id === id)
-    if (index >-1){
-        resumerData.experience.splice(index,1 );
-        return true
-    }
-    return false
+function getExperience(id) {
+  return resumeData.experience.find(e => e.id === id) || null;
 }
