@@ -1,29 +1,34 @@
 function getAllExperience() {
-    return resumeData.experience;
+  return resumeData.experience;
 }
-function AddBullPoint(expId, bulletsText){
-const exp = resumeData.experience.find(e => e.id=== expId)
-if(exp){
-    exp.bullet.push(bulletsText);
-   return true;
+
+function AddBullPoint(expId, bulletsText) {
+  const exp = resumeData.experience.find(e => e.id === expId);
+  if (exp) {
+    exp.bullets.push(bulletsText);
+    return true;
+  }
+  return false;
 }
- return  false;
+
+function UpdateBullet(expID, bulletIndex, NewText) {
+  const exp = resumeData.experience.find(e => e.id === expID);
+  if (exp && exp.bullets[bulletIndex] !== undefined) {
+    exp.bullets[bulletIndex] = NewText;
+    return true;
+  }
+  return false;
 }
-function UpdateBullet(expID, bulletIndex,NewText) {
-    const exp =resumeData.experience.find(e.id === expID);
-    if(exp && exp.bullet[bulletIndex]!==undefined)
-        { exp.bullets[bulletIndex]= NewText;
-            return true}
-    return false
-}
-function DeleteBullet(expId,bulletIndex) {
-      const exp = resumeData.experience.find(e => e.id === expId);
+
+function DeleteBullet(expId, bulletIndex) {
+  const exp = resumeData.experience.find(e => e.id === expId);
   if (exp && exp.bullets[bulletIndex] !== undefined) {
     exp.bullets.splice(bulletIndex, 1);
     return true;
   }
   return false;
 }
+
 function addEducation(degree, school, year, gpa, description) {
   const newEdu = {
     id: Date.now(),

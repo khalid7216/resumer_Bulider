@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Builder</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
- 
   <div class="container">
     <h1>📄 Resume Builder</h1>
     
@@ -61,13 +60,19 @@
       <input type="text" id="education" placeholder="BS Computer Science | FAST University | 2023">
     </div>
     
-    <button onclick="generateResume()">🔄 Generate Resume</button>
+    <button onclick="generateResume()">📄 Generate Resume</button>
     <button onclick="downloadResume()" class="btn-secondary">⬇️ Download HTML</button>
     <button onclick="downloadText()" class="btn-secondary">⬇️ Download Text</button>
+    <button onclick="clearAllData()" class="btn-danger">🗑️ Clear All</button>
     
     <div class="preview" id="preview">
       <p style="color: #999;">Preview will appear here...</p>
     </div>
   </div>
-  </body>
+  <script src="script.js"></script>
+  <script src="summary.js"></script>
+  <script src="skills.js"></script>
+  <script src="Experience.js"></script>
+  <script src="export.js"></script>
+</body>
 </html>
