@@ -15,8 +15,6 @@ const resumeData = {
   certifications: [],
   languages: []
 };
-
-// 2. PERSONAL INFO FUNCTIONS
 function setPersonalInfo(field, value) {
   if (resumeData.personal.hasOwnProperty(field)) {
     resumeData.personal[field] = value;
