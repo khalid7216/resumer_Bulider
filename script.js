@@ -1,4 +1,3 @@
-
 const resumeData = {
   personal: {
     name: '',
@@ -6,6 +5,9 @@ const resumeData = {
     phone: '',
     location: '',
     linkedin: '',
+    github: '',
+    behance: '',
+    linktree: '',
     portfolio: ''
   },
   summary: '',
@@ -15,6 +17,7 @@ const resumeData = {
   certifications: [],
   languages: []
 };
+
 function setPersonalInfo(field, value) {
   if (resumeData.personal.hasOwnProperty(field)) {
     resumeData.personal[field] = value;
@@ -60,6 +63,7 @@ function deleteExperience(id) {
   }
   return false;
 }
+
 function getExperience(id) {
   return resumeData.experience.find(e => e.id === id) || null;
 }

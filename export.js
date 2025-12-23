@@ -5,6 +5,7 @@ function exportToHTML() {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${resumeData.personal.name || 'Resume'}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
@@ -23,7 +24,27 @@ function exportToHTML() {
       padding-bottom: 5px; 
       margin: 25px 0 15px; 
     }
-    .contact { margin-bottom: 20px; color: #555; }
+    .contact { margin-bottom: 10px; color: #555; }
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #3498db;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .social-link:hover {
+      text-decoration: underline;
+    }
+    .social-link i {
+      font-size: 16px;
+    }
     .section { margin-bottom: 20px; }
     .job { margin-bottom: 20px; }
     .job-title { font-weight: bold; font-size: 18px; color: #2c3e50; }
@@ -43,6 +64,7 @@ function exportToHTML() {
     }
     @media print {
       body { padding: 0; }
+      .social-link { color: #3498db !important; }
     }
   </style>
 </head>
@@ -57,16 +79,31 @@ function exportToHTML() {
   if (resumeData.personal.location) contactParts.push(resumeData.personal.location);
   
   html += contactParts.join(' | ');
+  html += `</div>`;
   
+  // Social Links
+  const socialLinks = [];
   if (resumeData.personal.linkedin) {
-    html += `<br><a href="${resumeData.personal.linkedin}" target="_blank">LinkedIn</a>`;
+    socialLinks.push(`<a href="${resumeData.personal.linkedin}" target="_blank" class="social-link"><i class="fab fa-linkedin"></i> LinkedIn</a>`);
+  }
+  if (resumeData.personal.github) {
+    socialLinks.push(`<a href="${resumeData.personal.github}" target="_blank" class="social-link"><i class="fab fa-github"></i> GitHub</a>`);
+  }
+  if (resumeData.personal.behance) {
+    socialLinks.push(`<a href="${resumeData.personal.behance}" target="_blank" class="social-link"><i class="fab fa-behance"></i> Behance</a>`);
+  }
+  if (resumeData.personal.linktree) {
+    socialLinks.push(`<a href="${resumeData.personal.linktree}" target="_blank" class="social-link"><i class="fas fa-link"></i> Linktree</a>`);
   }
   if (resumeData.personal.portfolio) {
-    html += ` | <a href="${resumeData.personal.portfolio}" target="_blank">Portfolio</a>`;
+    socialLinks.push(`<a href="${resumeData.personal.portfolio}" target="_blank" class="social-link"><i class="fas fa-globe"></i> Portfolio</a>`);
   }
   
-  html += `</div>
-  </header>`;
+  if (socialLinks.length > 0) {
+    html += `<div class="social-links">` + socialLinks.join('') + `</div>`;
+  }
+  
+  html += `</header>`;
   
   // Summary
   if (resumeData.summary) {
@@ -175,150 +212,29 @@ function exportToHTML() {
   return html;
 }
 
-// Export to Plain Text
-function exportToText() {
-  let output = '';
-  
-  // Personal Info
-  if (resumeData.personal.name) {
-    output += `${resumeData.personal.name.toUpperCase()}\n`;
-    output += '='.repeat(50) + '\n\n';
+// Download as PDF using print functionality
+function downloadAsPDF() {
+  if (!resumeData.personal.name) {
+    alert('⚠️ Please generate resume first!');
+    return;
   }
   
-  // Contact
-  const contact = [];
-  if (resumeData.personal.email) contact.push(resumeData.personal.email);
-  if (resumeData.personal.phone) contact.push(resumeData.personal.phone);
-  if (resumeData.personal.location) contact.push(resumeData.personal.location);
-  
-  if (contact.length > 0) {
-    output += contact.join(' | ') + '\n';
-  }
-  
-  if (resumeData.personal.linkedin) output += `LinkedIn: ${resumeData.personal.linkedin}\n`;
-  if (resumeData.personal.portfolio) output += `Portfolio: ${resumeData.personal.portfolio}\n`;
-  
-  output += '\n';
-  
-  // Summary
-  if (resumeData.summary) {
-    output += 'PROFESSIONAL SUMMARY\n';
-    output += '-'.repeat(50) + '\n';
-    output += `${resumeData.summary}\n\n`;
-  }
-  
-  // Experience
-  if (resumeData.experience.length > 0) {
-    output += 'WORK EXPERIENCE\n';
-    output += '-'.repeat(50) + '\n';
-    
-    resumeData.experience.forEach(exp => {
-      output += `\n${exp.jobTitle}`;
-      if (exp.company) output += ` | ${exp.company}`;
-      output += '\n';
-      
-      if (exp.location || exp.startDate) {
-        const details = [];
-        if (exp.location) details.push(exp.location);
-        if (exp.startDate) details.push(`${exp.startDate} - ${exp.endDate || 'Present'}`);
-        output += details.join(' | ') + '\n';
-      }
-      
-      if (exp.bullets && exp.bullets.length > 0) {
-        exp.bullets.forEach(bullet => {
-          output += `• ${bullet}\n`;
-        });
-      }
-    });
-    output += '\n';
-  }
-  
-  // Education
-  if (resumeData.education.length > 0) {
-    output += 'EDUCATION\n';
-    output += '-'.repeat(50) + '\n';
-    
-    resumeData.education.forEach(edu => {
-      output += `\n${edu.degree}`;
-      if (edu.school) output += ` | ${edu.school}`;
-      output += '\n';
-      
-      if (edu.year) output += `${edu.year}`;
-      if (edu.gpa) output += ` | GPA: ${edu.gpa}`;
-      if (edu.year || edu.gpa) output += '\n';
-      
-      if (edu.description) output += `${edu.description}\n`;
-    });
-    output += '\n';
-  }
-  
-  // Skills
-  if (resumeData.skills.length > 0) {
-    output += 'SKILLS\n';
-    output += '-'.repeat(50) + '\n';
-    output += resumeData.skills.join(' • ') + '\n\n';
-  }
-  
-  // Certifications
-  if (resumeData.certifications.length > 0) {
-    output += 'CERTIFICATIONS\n';
-    output += '-'.repeat(50) + '\n';
-    resumeData.certifications.forEach(cert => {
-      output += `• ${cert.name}${cert.issuer ? ' - ' + cert.issuer : ''}${cert.date ? ' (' + cert.date + ')' : ''}\n`;
-    });
-    output += '\n';
-  }
-  
-  // Languages
-  if (resumeData.languages.length > 0) {
-    output += 'LANGUAGES\n';
-    output += '-'.repeat(50) + '\n';
-    resumeData.languages.forEach(lang => {
-      output += `• ${lang.language}${lang.proficiency ? ' - ' + lang.proficiency : ''}\n`;
-    });
-    output += '\n';
-  }
-  
-  return output;
-}
-
-// Download Functions
-function downloadAsHTML() {
   const content = exportToHTML();
-  const blob = new Blob([content], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(content);
+  printWindow.document.close();
   
-  const a = document.createElement('a');
-  a.href = url;
-  const fileName = resumeData.personal.name 
-    ? resumeData.personal.name.replace(/\s+/g, '_') 
-    : 'Resume';
-  a.download = `${fileName}_Resume.html`;
-  a.click();
-  
-  URL.revokeObjectURL(url);
-}
-
-function downloadAsText() {
-  const content = exportToText();
-  const blob = new Blob([content], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  
-  const a = document.createElement('a');
-  a.href = url;
-  const fileName = resumeData.personal.name 
-    ? resumeData.personal.name.replace(/\s+/g, '_') 
-    : 'Resume';
-  a.download = `${fileName}_Resume.txt`;
-  a.click();
-  
-  URL.revokeObjectURL(url);
+  setTimeout(() => {
+    printWindow.print();
+    alert('✅ Please use "Save as PDF" option in the print dialog!');
+  }, 250);
 }
 
 // Clear Data
 function clearAllData() {
   resumeData.personal = {
-    name: '', email: '', phone: '', location: '', linkedin: '', portfolio: ''
+    name: '', email: '', phone: '', location: '', linkedin: '', portfolio: '', 
+    github: '', behance: '', linktree: ''
   };
   resumeData.summary = '';
   resumeData.experience = [];
@@ -332,6 +248,11 @@ function clearAllData() {
   document.getElementById('email').value = '';
   document.getElementById('phone').value = '';
   document.getElementById('location').value = '';
+  document.getElementById('linkedin').value = '';
+  document.getElementById('github').value = '';
+  document.getElementById('behance').value = '';
+  document.getElementById('linktree').value = '';
+  document.getElementById('portfolio').value = '';
   document.getElementById('summary').value = '';
   document.getElementById('jobTitle').value = '';
   document.getElementById('company').value = '';
@@ -350,11 +271,18 @@ function generateResume() {
   resumeData.education = [];
   resumeData.skills = [];
   
-  // Get form values
+  // Get form values - Personal Info
   setPersonalInfo('name', document.getElementById('name').value);
   setPersonalInfo('email', document.getElementById('email').value);
   setPersonalInfo('phone', document.getElementById('phone').value);
   setPersonalInfo('location', document.getElementById('location').value);
+  
+  // Get Social Links
+  setPersonalInfo('linkedin', document.getElementById('linkedin').value);
+  setPersonalInfo('github', document.getElementById('github').value);
+  setPersonalInfo('behance', document.getElementById('behance').value);
+  setPersonalInfo('linktree', document.getElementById('linktree').value);
+  setPersonalInfo('portfolio', document.getElementById('portfolio').value);
   
   setSummary(document.getElementById('summary').value);
   
@@ -387,22 +315,4 @@ function generateResume() {
   preview.innerHTML = exportToHTML();
   
   alert('✅ Resume generated! Scroll down to see preview.');
-}
-
-function downloadResume() {
-  if (!resumeData.personal.name) {
-    alert('⚠️ Please generate resume first!');
-    return;
-  }
-  downloadAsHTML();
-  alert('✅ Resume downloaded as HTML!');
-}
-
-function downloadText() {
-  if (!resumeData.personal.name) {
-    alert('⚠️ Please generate resume first!');
-    return;
-  }
-  downloadAsText();
-  alert('✅ Resume downloaded as Text!');
 }

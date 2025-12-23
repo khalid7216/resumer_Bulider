@@ -16,6 +16,19 @@ body {
 h1 {
   color: #2c3e50;
   margin-bottom: 30px;
+  text-align: center;
+}
+
+.section-header {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  color: #3498db;
+  font-size: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ecf0f1;
 }
 
 .form-group {
@@ -29,6 +42,11 @@ label {
   color: #555;
 }
 
+label i {
+  margin-right: 5px;
+  color: #3498db;
+}
+
 input, textarea {
   width: 100%;
   padding: 10px;
@@ -36,6 +54,12 @@ input, textarea {
   border-radius: 5px;
   font-size: 14px;
   font-family: Arial, sans-serif;
+  transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #3498db;
 }
 
 textarea {
@@ -53,6 +77,7 @@ button {
   font-size: 16px;
   margin-right: 10px;
   margin-top: 10px;
+  transition: background 0.3s;
 }
 
 button:hover {
