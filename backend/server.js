@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/resumes', require('./routes/resume'));
+app.use('/api/v1/resumes', require('./routes/resume'));
 
 // Root route
 app.get('/', (req, res) => {
@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
         message: 'Resume Builder API',
         version: '1.0.0',
         endpoints: {
-            resumes: '/api/resumes'
+            resumes: '/api/v1/resumes'
         }
     });
 });
