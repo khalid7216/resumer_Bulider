@@ -10,10 +10,11 @@ const FormDataManager = {
             summary: document.getElementById('summary')?.value || '',
             experience: ExperienceManager.getData(),
             education: EducationManager.getData(),
-            skills: document.getElementById('skills')?.value || ''
+            skills: document.getElementById('skills')?.value || '',
+            projects: ProjectManager.getData()
         };
     },
-    
+
     validate(data) {
         if (!data.fullName) {
             return { valid: false, message: 'Please fill in at least your name!' };
